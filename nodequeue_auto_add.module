@@ -29,7 +29,6 @@ function nodequeue_auto_add_node_insert($node){
 
 /**
 * Implements hook_node_delete().
-* @return void
 */
 function nodequeue_auto_add_node_delete($node){
 	$nid = $node->nid;
