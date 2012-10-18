@@ -1,0 +1,7 @@
+Licence: http://johnmcc.mit-license.org/
+
+Automatically adds newly created nodes to the specified nodequeue. (Edit getTypeMap to return an array which maps content types you want to track to nodequeue IDs.) 
+
+Code has basically been generalised from this Stack Overflow answer: http://stackoverflow.com/a/10483181/22946
+
+Code is not up to drupal.org standards, and I should probably knock up some sort of admin config stuff too. Use with caution.

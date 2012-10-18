@@ -1,0 +1,63 @@
+<?php
+
+/**
+* Implements hook_node_insert().
+*/
+function nodequeue_auto_add_node_insert($node){
+	$nid = $node->nid;
+	$type = $node->type;
+
+	$types = getTypeMap();
+
+	// if new items of this content type should be added to a nodequeue...
+	if (array_key_exists($type, $types)){
+		$queue_id = $types[$type];
+		$sqid = $types[$type];
+
+		$queue = nodequeue_load($queue_id);
+		$subqueue = nodequeue_load_subqueue($sqid);
+
+		if(function_exists('views_invalidate_cache')){
+			views_invalidate_cache();
+		}
+		
+		nodequeue_subqueue_add($queue, $subqueue, $nid);
+	}else{
+		return FALSE;
+	}
+}
+
+/**
+* Implements hook_node_delete().
+* @return void
+*/
+function nodequeue_auto_add_node_delete($node){
+	$nid = $node->nid;
+	$type = $node->type;
+
+	$types = getTypeMap();
+
+	if (array_key_exists($type, $types)) {
+		if(function_exists('views_invalidate_cache')){
+			views_invalidate_cache();
+		}
+
+		$queue_id = $types[$type];
+		$sqid = $types[$type];
+
+		nodequeue_subqueue_remove_node($sqid, $nid);
+	}else{
+		return FALSE;
+	}
+}
+
+/***
+* @return array
+*/
+function getTypeMap(){
+	// Should return an array where the keys are the machine names of the content types,
+	// and the values are the IDs of the nodequeue each new item should be added to
+	return array(
+		'content_type_machine_name' => $nodequeue_id
+	);
+}
